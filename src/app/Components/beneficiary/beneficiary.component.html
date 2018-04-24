@@ -1,0 +1,179 @@
+<div class="form-group required">
+  <label for="beneficiary_account" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Beneficiary's account number: </label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <input type="text" name="beneficiary" [disabled]="userSettings?.IsRestricted=='Y'" #account="ngModel" required [(ngModel)]="paymentData.BenAccNum_AccTrnf"
+           id="beneficiary_account" maxlength="35" style="width:40%;height:20px"  />
+    <!-- <span *ngIf=" paymentData.isBenAccNum_AccTrnfInValid" class="form-validation-error"></span> -->
+    <span *ngIf=" paymentData.isBenAccNum_AccTrnfInValid" class="form-validation-error" i18n>Please fill in the "Beneficiary's account number" field.</span>
+  </div>
+</div>
+<div class="form-group required">
+  <label for="beneficiary" class=" col-xs-4 col-md-4 col-sm- 4" required i18n>Beneficiary's name: </label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <input type="text" name="beneficiary" maxlength="70" [disabled]="userSettings?.IsRestricted=='Y'" [(ngModel)]="paymentData.BenName_AccTrnf"
+           required #name="ngModel" id="beneficiary" style="width:45%;height:20px" />
+    <span *ngIf=" paymentData.isBenName_AccTrnfInValid" class="form-validation-error" i18n>'Beneficiary's name must be filled in.</span>
+  </div>
+</div>
+<div class="form-group">
+  <label for="beneficiary_address" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Beneficiary's address: </label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <textarea name="beneficiary_address" [(ngModel)]="paymentData.beneficiaryAddress" #benaddress [disabled]="transfertype.value =='Y' || userSettings?.IsRestricted=='Y'"
+              id="beneficiary_address" cols="37" maxrows="2" maxlength="70"></textarea>
+  </div>
+</div>
+<div class="form-group">
+  <label for="beneficiary_country" class=" col-xs-4 col-md-4 col-sm- 4" i18n>
+    Beneficiary's country:
+    <i *ngIf="paymentData.staticflag" class="text-danger" style="color:red">*</i>
+  </label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <select *ngIf="paymentMetaData?.Countries" id="beneficiary_country" [disabled]="transfertype.value =='Y' ||userSettings?.IsRestricted=='Y'"
+            [(ngModel)]="paymentData.beneficiarycountry" required #countryk="ngModel" required style="width:auto;">
+      <option *ngFor="let country of paymentMetaData.Countries" value="country.CountriesItem.CountryCode">{{country.CountriesItem.CountryText}}
+    </select>
+  </div>
+</div>
+<div class="form-group required">
+  <label for="amount" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Amount:</label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <input type="text" [(ngModel)]="paymentData.Amount_AccTrnf" #amount="ngModel" oninput="this.value = this.value.replace(/[^0-9,.]/, '')" maxlength="11" required name="amount" id="amount"
+           placeholder='{{ placeholderAmut | amountFormat:numberFormatBo}}' style="height:20px;" (blur)="validateAmount(amount.value)" />
+    <span *ngIf=" paymentData.isAmount_AccTrnfInValid" class="form-validation-error" i18n>The "Amount" field must be filled in.</span>
+    <select *ngIf="paymentMetaData?.Currencies && transfertype.value !='Y'" id="currency" [(ngModel)]="currency" required style="width:auto;  margin-left:15px;">
+      <option *ngFor="let curr of  commanData.currencies" value="curr.CurrenciesItem.CurrencyCode">{{curr.CurrenciesItem.CurrencyText}}
+    </select>
+    <h5 *ngIf="transfertype.value =='Y'">EUR </h5>
+  </div>
+</div>
+<div class="form-group ">
+  <label for="date" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Date:</label>
+  <div class="col-md-3 col-xs-3 col-sm-3">
+    <p-calendar #idt [(ngModel)]="paymentData.Date_AccTrnf" [dateFormat]="dateHandler.convertBoDateFormat2NgPrime(boDateFormat)"
+                tabindex="0" [minDate]="minDateValue" id="datepickerImage" placeholder='{{boDateFormat |uppercase}}' [showIcon]="true"
+                (onBlur)="validateDate($event)">
+    </p-calendar>
+  </div>
+  <span *ngIf="paymentData.Date_AccTrnf < minDateValue && paymentData.Date_AccTrnf != null" class=" form-validation-error"
+        i18n>Transaction date must be today's date or later.</span>
+  <span *ngIf="paymentData.Date_AccTrnf-minDateValue > 31490019833" class=" form-validation-error" i18n>Transaction date must be a maximum 365 days ahead.</span>
+  <span i18n> (Blank = first possible transaction date)</span>
+</div>
+<div class="form-group required">
+  <label for="transfer_type" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Transfer type: </label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <select id="transfer_type" #transfertype [(ngModel)]="paymentData.Transfer_typeAccTrnf" (ngModelChange)="paymentData.Display(transfertype.value)"
+            required>
+      <option selected value="N">Normal</option>
+      <option value="Y">Urgent</option>
+    </select>
+    <span *ngIf="paymentData.isTransfer_typeAccTrnfInValid" class=" form-validation-error" i18n> Transfer Type must be filled in.</span>
+  </div>
+</div>
+<p-dialog class="dialog" [(visible)]="paymentData.popup" [style]="{'width':'100px'}">
+  <p-header i18n>
+    <span i18n>Only EUR can be used for an Urgent payment,Would you like to change it to EUR ?</span>
+  </p-header>
+
+  <p-footer>
+    <button type="button" (click)="paymentData.ConformUrgent()" class="btn btn-primary1" style="width:auto" i18n>YES</button>
+    <button type="button" (click)="paymentData.CancelUrgent()" class="btn btn-primary1" style="width:auto" i18n>NO</button>
+  </p-footer>
+</p-dialog>
+<hr />
+<div id="ref_payDes" *ngIf="boCountryCode!='EE'">
+  <div class="form-group">
+    <label for="r1" class=" col-xs-4 col-md-4 col-sm- 4" i18n>
+      <input type="radio" name="test" id="r1" value="radio1" (click)="chageText(payDes)" #r11 checked="true" /> Reference number:
+      <i *ngIf="r11.checked" class="text-danger" style="color:red">*</i>
+    </label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <input type="text" #refNum required name="ref_number" [(ngModel)]="paymentData.ReferenceNum_AccTrnf" id="rb1" [disabled]="r11 && !r11.checked"
+             (blur)="ValidateRefNum(refNum.value)" style="height:20px" maxlength="27" />
+      <span *ngIf="r11.checked && paymentData.isReferenceNum_AccTrnfInValid" class="form-validation-error" i18n>Reference number must be filled in. </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="r2" class=" col-xs-4 col-md-4 col-sm- 4" i18n>
+      <input type="radio" name="test" id="r2" value="radio2" #r22 (click)="chageText(refNum)" /> Message to beneficiary:
+      <i *ngIf="r22.checked" class="text-danger" style="color:red">*</i>
+    </label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <textarea type="text" #payDes required name="rb2" [(ngModel)]="paymentData.MsgToBen_AccTrnf" id="rb2" cols="35" rows="2"
+                [disabled]="r22 && !r22.checked" (blur)="ValidateMsgToBen(payDes.value)" maxlength="130"></textarea>
+      <span *ngIf="r22.checked && paymentData.isMsgToBen_AccTrnfInValid " class="form-validation-error" i18n>Message to beneficiary field must be filled in.</span>
+    </div>
+  </div>
+</div>
+<div *ngIf="boCountryCode==='EE'">
+  <div class="form-group required">
+    <label for="radio1" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Reference number:</label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <input type="text" id="radio1" [(ngModel)]="paymentData.ReferenceNum_AccTrnf" #refEE maxlength="27" style="height:20px" />
+      <span *ngIf="paymentData.isReferenceNum_AccTrnfInValid" class="form-validation-error" i18n>Reference number must be filled in. </span>
+
+    </div>
+  </div>
+  <div class="form-group required">
+    <label for="radio2" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Message to beneficiary:</label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <textarea type="text" [(ngModel)]="paymentData.MsgToBen_AccTrnf" #MsgtoBenEE id="radio2" maxlength="130" cols="50" rows="2"> </textarea>
+    </div>
+    <span *ngIf="paymentData.isMsgToBen_AccTrnfInValid " class="form-validation-error" i18n>Message to beneficiary field must be filled in.</span>
+
+    <span *ngIf="refEE.value.length + MsgtoBenEE.value.length > 130" class="form-validation-error" i18n>Message to beneficiary exceeds max length</span>
+  </div>
+</div>
+<div class="form-group required">
+  <label for="document_number" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Document number: </label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <input type="text" [(ngModel)]="paymentData.documentNumberDate" #docnum minlength="10" maxlength="35" required name="document_number"
+           id="document_number" style="height:20px" (blur)="paymentData.ValidateDocNum(docnum.value)" />
+    <span *ngIf="paymentData.isDocumnetNumInValid" class="form-validation-error" i18n> Document number must be filled in.</span>
+  </div>
+</div>
+<div *ngIf="boCountryCode==='LV'">
+  <div class="form-group">
+    <label for="payment_type" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Statistic code: </label>
+    <div class="col-md-8 col-xs-8 col-sm-8 ">
+      <p-dropdown [options]="statCode" [(ngModel)]="inputStatisticCode" [filter]="true" [autoWidth]="false" [style]="{'width':'257px'}"
+                  name="dp2"></p-dropdown>
+      <a href="#" onClick="window.open('http://www-2.danskebank.com/link/Betalningskoder', '_blank')" i18n>List of statistic codes</a>
+    </div>
+  </div>
+</div>
+<div *ngIf="transfertype.value!=='Y'">
+  <div class="form-group">
+    <label for="payment_number" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Payment Id number:</label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <input type="text" [(ngModel)]="paymentData.paymentIdNumber" name="payment_number" id="payment_number" />
+    </div>
+  </div>
+</div>
+<div *ngIf="userSettings?.MayCreateCreditors=='Y'">
+  <hr />
+  <div class="form-group">
+    <label for="check_boc" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Save payment details as creditor</label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <input type="checkbox" #c (change)="$event;" name="check_boc" id="check_boc" />
+    </div>
+  </div>
+  <div *ngIf="c.checked ">
+    <div class="form-group ">
+      <label for="creditorID" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Creditor ID: </label>
+      <div class="col-md-8 col-xs-8 col-sm-8">
+        <input type="text" [(ngModel)]="creditor_NameId" name="creditorID" id="creditorID" />
+      </div>
+    </div>
+    <div class="form-group ">
+      <label for="creditorname" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Creditor name: </label>
+      <div class="col-md-8 col-xs-8 col-sm-8">
+        <input type="text" [(ngModel)]="creditor_Name" name="creditorID" id="creditorname" style="width:40%" />
+        <button *ngIf="isGetCreditorSuccessed" type="button" (click)="UpdateCreditor()" class="btn btn-primary1" i18n>Update Exiting Creditor</button>
+        <button type="button" (click)="SaveCreditor()" class="btn btn-primary1" i18n>Save as new creditor</button>
+      </div>
+    </div>
+  </div>
+</div>
+<hr />

@@ -1,0 +1,31 @@
+ #header1 h3 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    background: #fff !important;
+    color: #003f62 !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    height: 12px !important;
+    line-height: 12px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+  }
+  
+ #header2 h4 {
+    color: #003f62 !important;
+    background: none !important;
+    height: 32px !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    /* padding: 0 0 0 16px; */
+    color: #003f62 !important;
+    /* float: left; */
+    margin: 0 !important;
+    line-height: 32px !important;
+  }
+  .btn-primary1:disabled{
+    cursor: not-allowed !important;
+    background: url()  !important;
+    background:#dddddd  !important;
+    opacity: 0.35; 
+  }
+  

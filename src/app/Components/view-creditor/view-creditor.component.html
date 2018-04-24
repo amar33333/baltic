@@ -1,0 +1,123 @@
+<div class="col-md-12 col-sm-12 col-xs-12" *ngIf="isLoading">
+  <img src="./../assets/wait-spinner.gif" alt="" id="spwait_dd">
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12" *ngIf="!isLoading">
+  <div class="container  " style="width:934px; margin-bottom: 16px; margin-top: 30px; background-color:white;">
+    <h3 *ngIf="!delete && cdr_status==='ACTIVE'&& !auth" i18n> View Creditor </h3>
+    <h3 *ngIf="delete" i18n> Delete Creditor </h3>
+    <h3 *ngIf="cdr_status==='DRAFT'&& !auth &&!del_draft" i18n>View draft of creditor </h3>
+    <h3 *ngIf="del_draft" i18n>Delete draft of creditor </h3>
+    <h3 *ngIf="auth" i18n>Authorise</h3>
+
+
+    <form class="form-horizontal1">
+      <!-- <h3 i18n>Creditor details:</h3> -->
+      <a *ngIf="!creditor_detail" class="techref" (click)="creditordetail()">
+        <img src="./../assets/PilIndPak.gif"> Creditor details
+      </a>
+      <a *ngIf="creditor_detail" class="techref" (click)="creditordetail()">
+        <img src="./../assets/PilUdPak.gif"> Creditor details
+      </a>
+      <hr />
+      <!-- <h3 i18n>Payment data:</h3> -->
+      <div id="cdrId" *ngIf="creditor_detail" class="form-group1">
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Creditor ID:</label>
+          <label *ngIf="creditor">{{creditor.CreditorId}} </label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Creditor name:</label>
+          <label *ngIf="creditor">{{creditor.CreditorName}} </label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Payment type:</label>
+          <label *ngIf="creditor">{{creditor.PaymentTypeText}}</label>
+          <hr />
+        </div>
+      </div>
+      <a *ngIf="!payment_data" class="techref" (click)="paymentdata()">
+        <img src="./../assets/PilIndPak.gif"> Payment data
+      </a>
+      <a *ngIf="payment_data" class="techref" (click)="paymentdata()">
+        <img src="./../assets/PilUdPak.gif"> Payment data
+      </a>
+      <div id="paydata" *ngIf="payment_data" class="form-group1">
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Sender's account number:</label>
+          <label *ngIf="creditor"> {{creditor.SendersAccountNo}} </label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Beneficiary's account number:</label>
+          <label *ngIf="creditor">{{creditor.BenAccountNo}}</label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Beneficiary's name:</label>
+          <label *ngIf="creditor">{{creditor.BenName}}</label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Beneficiary's address:</label>
+          <label *ngIf="creditor">{{creditor.BenAddress}}</label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Amount:</label>
+          <label *ngIf="creditor">{{creditor.ReturnCode}}</label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Transaction type:</label>
+          <label *ngIf="creditor"> {{creditor.PaymentTypeText}}</label>
+        </div>
+      </div>
+      <hr />
+      <a *ngIf="!status_details	" class="techref" (click)="Statusdetails()">
+        <img src="./../assets/PilIndPak.gif">Status details
+      </a>
+      <a *ngIf="status_details	" class="techref" (click)="Statusdetails()">
+        <img src="./../assets/PilUdPak.gif"> Status details
+      </a>
+      <div id='statsdtail' *ngIf="status_details" class="form-group1">
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Creditor status:</label>
+          <label *ngIf="creditor">{{creditor.CreditorStatus}}</label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Created:</label>
+          <label *ngIf="creditor">{{creditor.CreditorCreatedBy}}</label>
+        </div>
+        <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+          <label class=" col-xs-4 col-md-4 col-sm-4 test" i18n>Authorised:</label>
+          <label *ngIf="creditor">{{creditor.AuthoriseCreditorAllowed}} </label>
+        </div>
+      </div>
+      <br />
+      <div id="crd" *ngIf="!delete && cdr_status==='ACTIVE'" class="form-group1" style="margin-left:0.5%;margin-bottom:10px">
+        <a *ngIf="creditor.CreateCreditorAllowed=='Y' && boViewUser===''" [routerLink]="['/copy']" [queryParams]="{Action:'createPayment',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" i18n>Create payment...</a>
+        <a *ngIf="creditor.CreateCreditorAllowed=='Y' && boViewUser===''" [routerLink]="['/editcreditor']" [queryParams]="{Action:'editCreditor',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" i18n>Edit creditor...</a>
+        <a *ngIf="creditor.CreateCreditorAllowed=='Y' && boViewUser===''" [routerLink]="['/copycreditor']" [queryParams]="{Action:'copyCreditor',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" i18n>Copy creditor...</a>
+        <a  *ngIf="creditor.CreateCreditorAllowed=='Y' && boViewUser===''" [routerLink]="['/deletecreditor']" [queryParams]="{Action:'deleteCreditor',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" i18n>Delete creditor...</a>
+           <button (click)=ListofCreditor()  class="btn btn-primary1" style="width:12%" i18n>Back</button>
+      </div>
+      <br />
+      <div id="drft" *ngIf="cdr_status==='DRAFT' && !auth &&!del_draft" class="form-group1" style="margin-left:0.5%;margin-bottom:10px">
+        <a id="authbtn" *ngIf="authorise==='Y'&& boViewUser===''" [routerLink]="['/authorisecreditor']" [queryParams]="{Action:'authoriseCreditor',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}" class="btn btn-primary1"
+           routerLinkActive="active">Authorise</a>
+        <a   *ngIf="creditor.CreateCreditorAllowed=='Y' && boViewUser===''" [routerLink]="['/editcreditor']" [queryParams]="{Action:'editDraft',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" i18n>Edit draft...</a>
+        <a   *ngIf="creditor.CreateCreditorAllowed=='Y' && boViewUser===''" [routerLink]="['/copycreditor']" [queryParams]="{Action:'copyDraft',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" i18n>Copy draft...</a>
+        <a   *ngIf="creditor.CreateCreditorAllowed=='Y' && boViewUser===''" [routerLink]="['/deletecreditor']" [queryParams]="{Action:'deleteDraft',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" i18n>Delete draft...</a>
+        <button (click)=ListofCreditor()  class="btn btn-primary1" style="width:12%" i18n>Back</button>
+      </div>
+
+      <div id="delt" *ngIf="delete||del_draft ||auth " class="form-group" style="margin-left:1%">
+        <button #ko (click)=DeleteAuthoriseCreditro() class="btn btn-primary1" style="width:12%" i18n>OK</button>
+        <a [routerLink]="['/deletecreditor']" [queryParams]="{Action:'viewCreditor',cdrid:cdr_id,cdrstatus:cdr_status,tempid:templt_id,tempstatus:templt_status,paycatg:Pay_catg}"
+           class="btn btn-primary1" routerLinkActive="active" style="width:12%" i18n>Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>

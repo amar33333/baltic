@@ -1,0 +1,78 @@
+body {
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+body {
+    display: block;
+    margin-left: 50px;
+}
+table {
+  border-collapse: collapse;
+}
+/* table, td, th {
+  border: .5px solid black ;
+} */
+table {
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width:0px;
+  width: 718px;
+  -webkit-border-horizontal-spacing: 0px;
+  -webkit-border-vertical-spacing: 0px;
+}
+     th {
+     display: table-cell;
+     vertical-align: inherit;
+     font-weight:normal;
+     border-right-width: 0px;
+     border-bottom-width: .5px;
+      border-left-width:0.1px;
+     border-top-width: 0px;
+     font-size:12px;
+
+    }
+    td {
+      display: table-cell;
+      vertical-align: inherit;
+      font-weight:normal;
+      border-right-width: 0px;
+      border-bottom-width: .5px;
+       border-left-width:0.1px;
+      border-top-width: .1px;
+      font-size:12px;
+      text-align: center;
+
+     }
+
+
+table {
+  white-space: normal;
+  line-height: normal;
+  font-weight: normal;
+  font-size: medium;
+  font-style: normal;
+  text-align: start;
+  font-variant: normal normal;
+}
+
+
+
+table {
+  display: table;
+  border-collapse: separate;
+  border-spacing: 0px;
+  border-color: grey;
+}
+
+.PageHeading1, .Heading1 {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+
+* {
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+}

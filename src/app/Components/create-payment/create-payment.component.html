@@ -1,0 +1,150 @@
+<div class="col-md-12 col-sm-12 col-xs-12" *ngIf="isLoading">
+<img src="./../assets/wait-spinner.gif" alt="" id="spwait_dd">
+</div>
+
+<div class="col-md-12 col-sm-12 col-xs-12" *ngIf="!isLoading">
+  <div class="container  " style="width:934px; margin-bottom: 160px; margin-top: 30px; background-color:white;">
+    <h3 *ngIf="(payment.value ==='LKT' || payment.value ==='VKT' || payment.value ==='TKT') && !copy && !edit" i18n> Create payment - Account transfer </h3>
+    <h3 *ngIf="(payment.value ==='OEL' || payment.value ==='OEV' || payment.value ==='OET') &&!copy &&!edit" i18n> Create payment - Account transfer internal </h3>
+    <h3 *ngIf="copy" i18n>Copy payment - Account transfer</h3>
+    <h3 *ngIf="edit" i18n>Edit payment - Account transfer</h3>
+    <h5 i18n><i class="text-danger"> * </i>Field must be filled in </h5>
+        
+    <form (ngSubmit)="onSubmit(myform)" class="form-horizontal" #myform="ngForm">
+      <div class="form-group">
+        <label for="save_payfldr" class=" col-xs-4 col-md-4 col-sm-4 " i18n>
+          <input type="checkbox" id="save_payfldr" name="folderPayment" #k [(ngModel)]="folderPayment" (ngModelChange)="onFolderChecked($event)" style="size:14px" >Save payment in folder</label>
+            <div id="folder_dp" *ngIf="k.checked && fldr_loading">
+                <img src="./../assets/loading-small.gif" alt="" id="spwait_fldr">
+           </div>
+            <div id="folder_dp" *ngIf="k.checked && !fldr_loading">
+            <div class="col-md-3 col-xs-3 col-sm-3">
+              <select id="_first" style="width:auto">
+                <option [value]="item.FoldersItem.FolderId" *ngFor="let item of foldersList">{{item.FoldersItem.FolderText}}</option>
+              </select>
+            </div>
+            <div class="col-xs-5 col-md-5 col-sm-5">
+              <span style=" margin-left:-15%"> or
+                <button type="button" #cf (click)="createfolder()" class=" btn-primary1" id="crtfolder" style="width:30%; margin-left:6%"
+                i18n>Create folder</button>
+              </span>
+            </div>
+        </div>
+      </div> 
+
+      <div id="fldr_name" *ngIf="visible && k.checked ">
+        <div class="form-group">
+          <label for="createfolder" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Folder name: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input [ngClass]="paymentdata.isfolderInValid? 'error': 'valid' " type="text" name="createfoldername" [(ngModel)]="paymentdata.folderName"
+              id="createfolder" style="height:20px" />
+            <span *ngIf="paymentdata.isfolderInValid" class="form-validation-error" i18n>This field must be filled in</span>
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <div *ngIf="payment.value ==='LKT' || payment.value ==='VKT' || payment.value ==='TKT'">
+        <div class="form-group">
+          <label for="creditor_id" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Creditor ID:</label>
+          <input id="creditor_id" type="text" [(ngModel)]="paymentdata.creditorID" name="cid" class=" col-xs-4 col-md-4 col-sm- 4"
+            style="padding-left:.02em;height:20px;margin-left: 15px;" />
+          <button type="button" (click)="getCreditor(creditor_ID)" class=" btn-primary1" style="width:12%; margin-left:20px" i18n>Find creditor</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="payment_type" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Payment type: </label>
+        <div class="col-md-8 col-xs-8 col-sm-8">
+          <select id="payment_type" [(ngModel)]="paymentdata.payment_type" (ngModelChange)="changePage(payment.value)" [disabled]="paymentdata.paytype"
+           #payment name="payment_type" required>
+           <option [value]="item.PaymentTypesItem.PaymentType" [selected]="item.PaymentTypesItem.PaymentType" *ngFor="let item of paymentTypesList">{{item.PaymentTypesItem.PaymentTypeText}}</option>
+          </select>
+        </div>
+     </div>
+     <hr/>
+
+     <div class="form-group required">
+        <label for="payer_account" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Sender's account number: </label>
+        <div class="col-md-8 col-xs-8 col-sm-8 required" id="dp1">
+          <p-dropdown *ngIf="senderAccount" class="replace" id="sender" name="sender" minlength="18" required #sender [style]="{'width':'257px'}"
+            [options]="senderAccount" [(ngModel)]="paymentdata.sender" (onChange)="commonfunctions.changeflag(sender.value,paymentdata.payment_type,paymentmetadata)"
+            [filter]="true" [appDropdownpipe]="sender?.selectedOption?.label">
+            <!-- [appDropdownpipe]="sender?.selectedOption?.label" -->
+            <ng-template let-account pTemplate="item">
+              <div class="dDaccText " id="senderaccountname">{{account.label | split:'acctext'}}
+                <div class="dDAccNumber" id="senderaccountnumber">{{account.label | split: 'accnumb'}}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+          <span *ngIf="paymentdata.isSenderAccInValid">Sender's account number should be filled in.</span>
+          <span *ngIf="paymentdata.sender && !commonfunctions.isBalance">
+           <a id="account_balance"  style="cursor:pointer"  (click)="showBalance(paymentdata.sender)"  i18n>Show Available Balance</a>
+          </span>
+          <img *ngIf="balanceLoading" src="./../assets/loading-small.gif" alt="" id="spwait_fldr">
+            <label *ngIf="commonfunctions.isBalance && !balanceLoading" i18> Available Balance: {{balancemodel.Balance| number:'1.2-2'|amountFormat:numberFormatBo}} {{balancemodel.Currency}}</label>
+        </div>
+     </div>
+
+      <div id="bne_acc" *ngIf="payment.value ==='LKT' || payment.value ==='VKT' || payment.value ==='TKT'">
+       <app-beneficiary [userSettings]="userSettings" [paymentMetaData]="paymentmetadata" [creditorData]="creditorData"></app-beneficiary>
+      </div>
+
+      <div id="own_acc" *ngIf="payment.value ==='OEL' || payment.value ==='OEV' || payment.value ==='OET'">
+        <app-own-account [userSettings]="userSettings" [senderAccounts]="paymentdata.sender" [paymentMetaData]="paymentmetadata"></app-own-account>
+      </div>
+
+      <div class="form-group">
+        <label for="check_bolc" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Create more payments</label>
+        <div class="col-md-8 col-xs-8 col-sm-8">
+          <input type="checkbox" [(ngModel)]="more_payments" (ngModelChange)="setval1(more_payments)" name="check_bolc" id="check_bolc"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="check_boc2" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Authorise payment</label>
+        <div class="col-md-8 col-xs-8 col-sm-8">
+          <input type="checkbox" [(ngModel)]="authorize_payment" (ngModelChange)="setval4(authorize_payment)" name="check_boc2" id="check_boc2"
+          />
+        </div>
+      </div>
+      <div id="proceed_unauthorise" *ngIf="!k.checked">
+        <div class="form-group">
+          <label for="check_boc1" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Proceed to unauthorised payments</label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="checkbox" [(ngModel)]="proceed_unauthorized_payment" (ngModelChange)="setval(proceed_unauthorized_payment)"
+              name="check_boc1" id="check_boc1" />
+          </div>
+        </div>
+      </div>
+      <div id="closefolder" *ngIf="k.checked">
+        <div class="form-group">
+          <label for="check_boc3" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Close current folder</label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="checkbox" [(ngModel)]="close_folder" (ngModelChange)="setval3(close_folder)" name="check_boc3" id="check_boc3"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="check_boc4" class=" col-xs-4 col-md-4 col-sm- 4" i18n>Authorise all payments and close the folder</label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="checkbox" [(ngModel)]="close_folder_authorize_payment" (ngModelChange)="setval(close_folder_authorize_payment)"
+              name="check_boc4" id="check_boc4" />
+          </div>
+        </div>
+      </div>
+      <div *ngIf="(payment.value ==='LKT' || payment.value ==='VKT' || payment.value ==='TKT')" class="form-group" style="margin-left:1%">
+        <button #OkAccTrf type="button" (click)="savedata()" class=" btn-primary1" [disabled]="boViewUser!=''" style="width:12%" i18n>OK</button>
+        <button type="button" class=" btn-primary1" style="width:12%" i18n>Cancel</button>
+        <button type="button" (click)="paymentdata.formrset()" class=" btn-primary1" id="clr_flds" style="width:12%" i18n>Clear fields</button>
+      </div>
+      <div *ngIf="(payment.value ==='OEL' || payment.value ==='OEV' || payment.value ==='OET') " class="form-group" style="margin-left:1%">
+        <button #OkAccTrfInt type="button" (click)="paymentdata.savedata()" class=" btn-primary1" [disabled]="boViewUser!=''"  style="width:12%" i18n>OK</button>
+        <button type="button" class=" btn-primary1" style="width:12%" i18n>Cancel</button>
+        <button type="button" (click)="paymentdata.formrset()" class=" btn-primary1" id="clr_fldes" style="width:12%" i18n>Clear fields</button>
+      </div>
+    </form>
+  </div>
+</div> 
+

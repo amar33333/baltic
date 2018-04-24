@@ -1,0 +1,6 @@
+.btn-primary1:disabled {
+  cursor: not-allowed !important;
+  background: url() !important;
+  background: #dddddd !important;
+  opacity: 0.35;
+}

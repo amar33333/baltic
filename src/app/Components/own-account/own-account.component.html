@@ -1,0 +1,119 @@
+<div *ngIf="!isLoading">
+  <div class="form-group">
+    <div class="col-md-8 col-xs-8 col-sm-8 col-md-offset-4 col-sm-offset-4 col-xs-offset-4">
+      <input type="checkbox" [(ngModel)]="paymentdata.sameaccount" (ngModelChange)="SameAccount()" name="same_currency" id="same_currency" />
+      <label for="same_currency" i18n> Same Account, between currencies</label>
+    </div>
+  </div>
+
+
+  <div class="form-group required ">
+    <label for="beneficiary_account" class="col-xs-4 col-md-4 col-sm- 4" i18n>Beneficiary's account number: </label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <!-- <div *ngIf="paymentdata.beneficiaryAccountNumber"> -->
+      <p-dropdown *ngIf="paymentdata.beneficiaryAccount" id="benAccount" [options]="paymentdata.beneficiaryAccount" required #benacc
+                  [(ngModel)]="paymentdata.beneficiaryAccountNumber" [style]="{'width':'257px'}" (onChange)="paymentdata.benFLag(benacc.value)"
+                  [filter]="true" name="benAccount" [appDropdownpipe1]="benacc?.selectedOption?.label">
+        <ng-template let-account pTemplate ="item">
+          <div class ="dDaccText">
+            {{account.label | split:'acctext'}}
+            <div class ="dDAccNumber">{{account.label |split:'accnumb'}}
+    </div>
+  </div>
+  </ng-template>
+  </p-dropdown>
+  <!-- </div> -->
+
+  <span *ngIf=" paymentdata.isBeneficiaryAccInValid" class="form-validation-error"></span>
+  <span *ngIf=" paymentdata.isBeneficiaryAccInValid" i18n>Please fill in the "Beneficiary's account number" field.</span>
+
+</div>
+  </div>
+
+<div class="form-group required">
+  <label for="amount" class="col-xs-4 col-md-4 col-sm- 4" i18n>Amount:</label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <!-- <input pInputText       type="text" pTooltip="Enter your username" tooltipPosition="top" tooltipEvent="focus" appendTo="amunt"> -->
+    <input [ngClass]="paymentdata.isAmountInValid? 'error': 'valid' " type="text" name="amount" #amunt oninput="this.value = this.value.replace(/[^0-9,.]/, '')"
+           required id="amount" [(ngModel)]="paymentdata.amount" placeholder='{{ placeholderAmut | amountFormat:numberFormatBo}}'
+           style="height:20px" />
+    <!-- <span *ngIf="paymentdata.isAmountInValid" class="form-validation-arrow-up"></span> -->
+    <span *ngIf="paymentdata.isAmountInValid" class="form-validation-error" i18n>The "Amount" field must be filled in.</span>
+    <select *ngIf="commonfunctions?.currencies" id="currency" name="currency" style="width:auto; margin-left:15px;">
+      <option *ngFor="let curr of  commonfunctions.currencies" value="curr.CurrenciesItem.CurrencyCode">{{curr.CurrenciesItem.CurrencyText}}
+    </select>
+    <!-- <span *ngIf="paymentdata.isAmountFmtErr" class="alert alert-danger" i18n>Please provide amount in correct format.</span> -->
+  </div>
+</div>
+
+
+<div class="form-group ">
+  <label for="date" class="col-xs-4 col-md-4 col-sm- 4" i18n>Date: </label>
+  <div class="col-md-3 col-xs-3 col-sm-3">
+    <p-calendar [(ngModel)]="paymentdata.date" [dateFormat]="date_hadler.convertBoDateFormat2NgPrime(boDateFormat)" tabindex="0"
+                [minDate]="minDateValue" id="datepickerImage" placeholder='{{boDateFormat | uppercase}}' [showIcon]="true" (onBlur)='ValidateDate($event)'>
+    </p-calendar>
+  </div>
+  <span *ngIf="paymentdata.date < minDateValue && paymentdata.date != null" class=" form-validation-error" i18n> Transaction date must be today's date or later.</span>
+  <span i18n> (Blank = first possible transaction date)</span>
+</div>
+<div *ngIf="!paymentdata.estoniaflag">
+  <div class="form-group">
+    <label for="r1" class="col-xs-4 col-md-4 col-sm- 4" i18n>
+      <input type="radio" name="test" id="r1" value="radio1" checked="true" (click)="chageText(payDes)" #r111 /> Reference number:
+      <i *ngIf="r111.checked" class="text-danger" style="color:red">*</i>
+    </label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <input [ngClass]="paymentdata.isReferenceNumberInValid &&r111.checked? 'error': 'valid' " type="text" #refNum required name="ref_Number"
+             [(ngModel)]="paymentdata.referencenumber" [disabled]="!r111.checked" style="height:20px" />
+      <span *ngIf="r111.checked && paymentdata.isReferenceNumberInValid" class=" form-validation-error" i18n> Reference number must be filled in.</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="r2" class="col-xs-4 col-md-4 col-sm- 4" i18n>
+      <input type="radio" name="test" id="r2" value="radio2" #r222 (click)="chageText(refNum)" /> Message to beneficiary:
+      <i *ngIf="r222.checked" class="text-danger" style="color:red">*</i>
+    </label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <textarea [ngClass]="paymentdata.isMessageToBenInValid && r222.checked? 'error': 'valid' " type="text" required #payDes name="pay_Description"
+                [(ngModel)]="paymentdata.messageToBen"cols="40" rows="2" [disabled]="!r222.checked"></textarea>
+
+      <span *ngIf="r222.checked && paymentdata.isMessageToBenInValid" class="form-validation-error" i18n> Message to beneficiary must be filled in.</span>
+    </div>
+  </div>
+</div>
+<div *ngIf="paymentdata.estoniaflag">
+  <div class="form-group required">
+    <label for="radio1" class="col-xs-4 col-md-4 col-sm- 4" i18n>Reference number:</label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <input type="text" id="radio1" required #ref [(ngModel)]="paymentdata.referencenumber" style="height:20px" />
+      <span *ngIf="ref.invalid && (ref.dirty || ref.touched) ||paymentdata.isReferenceNumberValid" class="alert alert-danger">
+        <span *ngIf="ref.errors">Reference number is required.</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group required">
+    <label for="radio2" class="col-xs-4 col-md-4 col-sm- 4" i18n>Message to beneficiary:</label>
+    <div class="col-md-8 col-xs-8 col-sm-8">
+      <textarea type="text" required #payds id="radio2" [(ngModel)]="paymentdata.messageToBen"cols="50" rows="2"> </textarea>
+      <span *ngIf="payds.invalid && (payds.dirty || payds.touched)|| paymentdata.isPaymentDescriptionValid" class="alert alert-danger">
+        <span *ngIf="payds.errors">Message to beneficiary is required.</span>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="form-group required">
+  <label for="document_number" class="col-xs-4 col-md-4 col-sm- 4" i18n>Document number: </label>
+  <div class="col-md-8 col-xs-8 col-sm-8">
+    <input [ngClass]="paymentdata.isDocumnetNumInValid ? 'error': 'valid' " #docnum type="text" name="document_number" [(ngModel)]="paymentdata.documentNumberDate"
+           id="document_number" style="height:20px" (blur)="paymentdata.ValidateDocNum(docnum.value)" />
+    <span *ngIf="paymentdata.isDocumnetNumInValid" class="form-validation-error" i18n> Document number must be filled in.</span>
+  </div>
+</div>
+
+
+<hr />
+</div>
+

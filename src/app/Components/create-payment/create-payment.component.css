@@ -1,0 +1,36 @@
+h3 {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background: #fff !important;
+  color: #003f62 !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  height: 12px !important;
+  line-height: 12px !important;
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+h4 {
+  color: #003f62 !important;
+  background: none !important;
+  height: 32px !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  /* padding: 0 0 0 16px; */
+  color: #003f62 !important;
+  /* float: left; */
+  margin: 0 !important;
+  line-height: 32px !important;
+}
+
+#spwait_fldr {
+  top: 25%;
+  left: 48%;
+    /* background: transparent url("./assets/wait-spinner.gif") no-repeat !important; */
+}
+.btn-primary1:disabled{
+  cursor: not-allowed !important;
+  background: url()  !important;
+  background:#dddddd  !important;
+  opacity: 0.35; 
+}

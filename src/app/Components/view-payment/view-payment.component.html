@@ -1,0 +1,94 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+  <div class="container  " style="width:934px; margin-bottom: 16px; margin-top: 30px; background-color:white;">
+    <h3 *ngIf="viewresult" style="margin-bottom:2%" i18n> View payment - {{viewresult.payment_type}} </h3>
+   
+
+    <form class="form-horizontal1">
+      <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" style="margin-bottom:2%" i18n>Payment type:</label>
+        <label class="col-xs- 8col-md-8 col-sm-8 test" *ngIf="viewresult">{{viewresult.payment_type}}</label>
+      </div>
+      <hr />
+      <h3 style="margin-left:1%" i18n>Payment data:</h3><br />
+      <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Sender's account number:</label>
+        <label *ngIf="viewresult">{{viewresult.sender}}</label>
+      </div>
+      <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Beneficary's account number:</label>
+        <label *ngIf="viewresult">{{viewresult.beneficiary}}</label>
+      </div>
+      <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Amount:</label>
+        <label *ngIf="viewresult">{{viewresult.amount}}</label>
+      </div>
+      <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Transaction date:</label>
+        <label *ngIf="viewresult">{{viewresult.date}}</label>
+      </div>
+      <div class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Transfer type:</label>
+        <label *ngIf="viewresult">{{viewresult.transfer_type}}</label>
+      </div>
+      <hr />
+
+
+      <a *ngIf="!status_flag" class="techref" (click)="status()">
+        <img src="./../assets/PilIndPak.gif"> Status details
+      </a>
+      <a *ngIf="status_flag" class="techref" (click)="status()">
+        <img src="./../assets/PilUdPak.gif"> Status details
+      </a>
+
+      <div *ngIf="status_flag" class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Payment status:</label>
+        <label *ngIf="viewresult">{{viewresult.payment_statu}} </label>
+      </div>
+      <hr />
+      <h3> Payment history</h3>
+      <div class="form-group1  col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Created:</label>
+        <label *ngIf="viewresult"> {{viewresult.date}} by {{viewresult.created}}</label>
+      </div>
+      <div *ngIf=" viewresult && viewresult.payment_statu=='Processed'" class="form-group1">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Authorised:</label>
+        <label *ngIf="viewresult"> {{viewresult.date}} by {{viewresult.created}}</label>
+      </div>
+      <hr />
+
+      <a *ngIf="!tech_ref" class="techref" (click)="techref()">
+        <img src="./../assets/PilIndPak.gif">Technical references
+      </a>
+      <a *ngIf="tech_ref" class="techref" (click)="techref()">
+        <img src="./../assets/PilUdPak.gif">Technical references
+      </a>
+      <div *ngIf="tech_ref" class="form-group1 col-md-12 col-sm-12 col-xs-12">
+        <label class="col-xs-4 col-md-4 col-sm-4 test" i18n>Bank's archive reference no.:</label>
+        <label>{{bank_ref}} </label>
+      </div>
+      <hr />
+      <a href="#">
+        <span class="glyphicon glyphicon-print " i18n> </span> Print version
+      </a>
+
+      <div class="form-group1" style="margin-left:0.5%;margin-bottom:10px;margin-top:8px">
+        <a href="#" class="btn btn-primary1" style="width:12%" i18n>Back</a>
+        <button *ngIf="viewresult && viewresult.payment_statu!='Processed'&& boViewUser==''" type="button" class="btn btn-primary1" (click)="goCNN()"
+                style="width:15%" i18n>
+          Authorise payment
+        </button>
+
+        <a *ngIf="viewresult && viewresult.payment_statu!='Processed' && boViewUser==''" [routerLink]="['/view']" [queryParams]="{Pay_Id:viewresult.id,ID:'authorise'}" class="btn btn-primary1"
+           routerLinkActive="active">Authorise payment</a>
+
+        <a *ngIf="viewresult && boViewUser!=''" [routerLink]="['/copy']" [queryParams]="{Pay_Id:viewresult.id,ID:'copy'}" class="btn btn-primary1"
+           routerLinkActive="active">Copy payment...</a>
+        <a *ngIf="viewresult && boViewUser!=''" [routerLink]="['/edit']" [queryParams]="{Pay_Id:viewresult.id,ID:'edit'}" class="btn btn-primary1"
+           routerLinkActive="active">Edit payment...</a>
+        <a *ngIf="viewresult && boViewUser!=''" [routerLink]="['/view']" [queryParams]="{Pay_Id:viewresult.id,ID:'delete'}" class="btn btn-primary1"
+           routerLinkActive="active">Delete payment...</a>
+      </div>
+
+    </form>
+  </div>
+</div>

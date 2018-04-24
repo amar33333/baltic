@@ -1,0 +1,191 @@
+<div class="col-md-12 col-sm-12 col-xs-12" *ngIf="isLoading">
+  <img src="./../assets/wait-spinner.gif" alt="" id="spwait_dd">
+</div>
+
+<div class="col-md-12 col-sm-12 col-xs-12" *ngIf="!isLoading">
+  <div class="container  " style="width:934px; margin-bottom: 160px; margin-top: 30px; background-color:white;">
+    <span *ngIf="CreditorResult.ReturnCode==4" class="alert alert-danger" style="color:red">{{Error_Message}}</span>
+    <span *ngIf="CreditorResult.ReturnCode==50" class="alert alert-danger" style="color:red" i18n>Technical Error!!!</span>
+    <h3 *ngIf="!copy&&!edit&&!copyDraft&&!editDraft" i18n> Create creditor </h3>
+    <h3 *ngIf="copy" i18n> Copy creditor </h3>
+    <h3 *ngIf="edit" i18n> Edit creditor </h3>
+    <h3 *ngIf="copyDraft" i18n> Copy draft of creditor </h3>
+    <h3 *ngIf="editDraft" i18n> Edit draft of creditor </h3>
+    <div *ngIf="userSettings?.MayCreateCreditors=='Y'">
+      <h4 i18n> Creditor details </h4>
+      <form (ngSubmit)="onSubmit(myform.value)" class="form-horizontal" #myform="ngForm">
+
+        <div class="form-group required">
+          <label for="creditor_id" class="col-xs-4 col-md-4 col-sm- 4" i18n>Creditor ID: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="text" name="creditor_id" [(ngModel)]="input_fromScreen.CreditorNameId" (blur)="validateCreditorNameId(cid.value)"
+                   required #cid="ngModel" maxlength="20" id="creditor_id" style="width:30%;height:20px" />
+            <span *ngIf="isCreditorNameIdInValid" class="form-validation-error" i18n>Creditor ID must be entered.</span>
+          </div>
+        </div>
+
+        <div class="form-group required">
+          <label for="creditor_nam" class="col-xs-4 col-md-4 col-sm- 4" i18n>Creditor name: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="text" name="creditor_nam" [(ngModel)]="input_fromScreen.CreditorName" (blur)="validateCreditorName(cname.value)"
+                   required #cname="ngModel" id="creditor_nam" style="width:30%;height:20px" />
+            <span *ngIf="isCreditorNameInValid" class="form-validation-error" i18n>Creditor name must be entered.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="payment_typ" class="col-xs-4 col-md-4 col-sm- 4" i18n>Payment type:</label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <select id="payment_typ" [(ngModel)]="creditor_model.PaymentCategory " required [disabled]="paytype" #payment id="payment_typ"
+                    name="payment_typ">
+              <option [value]="item.PaymentTypesItem.PaymentType" *ngFor="let item of paymentTypesList">{{item.PaymentTypesItem.PaymentTypeText}}</option>
+            </select>
+          </div>
+        </div>
+
+        <hr />
+        <h3> Payment data</h3>
+        <div class="form-group ">
+          <label for="payer_account" class="col-xs-4 col-md-4 col-sm- 4" i18n>Sender's account number: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8 ">
+            <p-dropdown *ngIf="senderAccount" class="replace" id="sender" [(ngModel)]="input_fromScreen.SendersAccountId" [style]="{'width':'257px'}"
+                        required #sender name="sender" minlength="18" [options]="senderAccount" [filter]="true" (onChange)="commonfunctions.changeflag(sender.value,payment.value,paymentmetadata)"
+                        [appDropdownpipe]="sender?.selectedOption?.label">
+              <ng-template let-account pTemplate="item">
+                <div class="dDaccText " id="senderaccountname">
+                  {{account.label | split:'acctext'}}
+                  <div class="dDAccNumber" id="senderaccountnumber">{{account.label | split: 'accnumb'}}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <label for="beneficiary_account" class="col-xs-4 col-md-4 col-sm- 4" i18n>Beneficiary's account number: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="text" name="beneficiary_account" [(ngModel)]="input_fromScreen.BeneficiaryAccountNumber" required #benAccount="ngModel"
+                   id="beneficiary_account" style="width:40%;height:20px" />
+          </div>
+        </div>
+        <div class="form-group ">
+          <label for="beneficiary" class="col-xs-4 col-md-4 col-sm- 4" required i18n>Beneficiary's name: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="text" name="beneficiary" [(ngModel)]="creditor_Acc_type.BeneficiaryName" required #benName="ngModel" id="beneficiary"
+                   style="width:40%;height:20px" />
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="beneficiary_address" class="col-xs-4 col-md-4 col-sm- 4" i18n>Beneficiary's address: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <textarea name="beneficiary_address" maxLength="70" maxRows="2" [(ngModel)]="creditor_Acc_type.BeneficiaryAddress" required
+                      #benAddress="ngModel" id="beneficiary_address"cols="37" rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="beneficiary_country" class="col-xs-4 col-md-4 col-sm- 4" i18n>Beneficiary's country:</label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <select *ngIf="paymentmetadata?.Countries" id="beneficiary_country" [(ngModel)]="creditor_Acc_type.BeneficiaryCountry" name="beneficiary_country"
+                    required #countryk="ngModel" style="width:auto;">
+              <option *ngFor="let country of paymentmetadata?.Countries" value={{country.CountriesItem.CountryCode}}>{{country.CountriesItem.CountryText}}
+            </select>
+
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <label for="amount" class="col-xs-4 col-md-4 col-sm- 4" i18n>Amount:</label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="text" id="amount" [disabled]="true" style="height:20px;" />
+            <select *ngIf="commonfunctions?.currencies" id="currency" name="currency" [(ngModel)]="input_fromScreen.PaymentCurrency"
+                    style="width:auto; margin-left:15px;">
+              <option *ngFor="let curr of  commonfunctions.currencies" value={{curr.CurrenciesItem.CurrencyCode}}>{{curr.CurrenciesItem.CurrencyText}}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <label for="payment_type" class="col-xs-4 col-md-4 col-sm- 4" i18n>Transfer type: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <select id="payment_type" [(ngModel)]="creditor_Acc_type.IsUrgent" required #transfertype="ngModel" name="payment_type">
+              <option value="N">Normal</option>
+              <option value="Y">Urgent</option>
+            </select>
+          </div>
+        </div>
+        <hr />
+
+        <div id="ref_payDes" *ngIf="!commonfunctions.estoniaflag">
+          <div class="form-group">
+            <label for="r1" class="col-xs-4 col-md-4 col-sm- 4" i18n>
+              <input type="radio" name="test" id="r1" value="radio1" (click)="chageText(payDes)" #r11 checked="true" /> Reference number:
+              <i *ngIf="r11.checked" id="rdrefnum" class="text-danger" style="color:red">*</i>
+            </label>
+            <div class="col-md-8 col-xs-8 col-sm-8">
+              <input type="text" #refNum required name="ref_number" [(ngModel)]="input_fromScreen.ReferenceNumber" id="rb1" [disabled]="r11 && !r11.checked"
+                     style="height:20px" />
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="r2" class="col-xs-4 col-md-4 col-sm- 4" i18n>
+              <input type="radio" name="test" id="r2" value="radio2" #r22 (click)="chageText(refNum)" /> Message to beneficiary:
+              <i *ngIf="r22.checked" class="text-danger" style="color:red">*</i>
+            </label>
+            <div class="col-md-8 col-xs-8 col-sm-8">
+              <textarea type="text" #payDes required name="Msg2Ben" [(ngModel)]="input_fromScreen.PaymentDescription" id="Msg2Ben"cols="50"
+                        rows="2" [disabled]="r22 && !r22.checked"></textarea>
+
+            </div>
+          </div>
+        </div>
+        <div id="estnia" *ngIf="commonfunctions.estoniaflag">
+          <div class="form-group required">
+            <label for="radio1" class="col-xs-4 col-md-4 col-sm- 4" i18n>Reference number:</label>
+            <div class="col-md-8 col-xs-8 col-sm-8">
+              <input type="text" id="radio1" [(ngModel)]="input_fromScreen.ReferenceNumber" name="refnum" style="height:20px" />
+            </div>
+          </div>
+
+          <div class="form-group required">
+            <label for="radio2" class="col-xs-4 col-md-4 col-sm- 4" i18n>Message to beneficiary:</label>
+            <div class="col-md-8 col-xs-8 col-sm-8">
+              <textarea type="text" [(ngModel)]="input_fromScreen.PaymentDescription" id="radio2" name="msg2ben"cols="50" rows="2"> </textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group required">
+          <label for="document_number" class="col-xs-4 col-md-4 col-sm- 4" i18n>Document number: </label>
+          <div class="col-md-8 col-xs-8 col-sm-8">
+            <input type="text" [(ngModel)]="documentNumberDate" #docnum="ngModel" minlength="10" required name="document_number" id="document_number"
+                   style="height:20px" />
+          </div>
+        </div>
+        <div *ngIf="transfertype.value!=='Y'">
+          <div id="payidnum" class="form-group">
+            <label for="payment_number" class="col-xs-4 col-md-4 col-sm- 4" i18n>Payment Id number:</label>
+            <div class="col-md-8 col-xs-8 col-sm-8">
+              <input type="text" [(ngModel)]="input_fromScreen.PaymentEndToEndId" name="payment_number" id="payment_number" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-left:1%">
+          <button #ko type="submit" class="btn-primary1"  [disabled]="boViewUser!=''" style="width:12%" i18n>OK</button>
+
+          <button type="button" class="btn-primary1" (click)=ListofCreditor()  style="width:12%" i18n>Cancel</button>
+          <button *ngIf="!copy&&!edit&&!copyDraft&&!editDraft" [disabled]="boViewUser!=''" type="reset" class="btn-primary1" style="width:12%" i18n>Clear fields</button>
+
+        </div>
+      </form>
+    </div>
+    <div *ngIf="userSettings?.MayCreateCreditors=='N'">
+      You are not authorised to create, edit, copy or delete creditors.
+    </div>
+  </div>
+</div>

@@ -1,0 +1,522 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~primeng/resources/primeng.min.css";
+@import "~primeng/resources/themes/omega/theme.css";
+
+
+#spwait_dd{
+  margin-left: 40%;
+  margin-top: 4%;
+  position:  fixed;
+  top: 25%;
+  left: 48%;
+  width: 48px;
+  height: 48px;
+  background: transparent url("./assets/wait-spinner.gif") no-repeat !important;
+  }
+
+.form-validation-error {
+  width: inherit;
+  padding: 3px;
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox, other Gecko */
+  box-sizing: border-box;
+  background: white;
+  position: relative;
+  color: #003F62;
+  z-index: 100;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid red;
+  margin-left: 6px;
+  padding: 3px;
+}
+
+.form-validation-error:before {
+  content: '';
+  position: absolute;
+  top: 45%;
+  right: 100%;
+  margin-top: -8px;
+  width: 0px;
+  height: 0px;
+  border-right: 12px solid red;
+  border-top: 8.5px solid;
+  border-bottom: -2px solid;
+  border-color: transparent red transparent transparent;
+  margin-left: 2px;
+}
+
+.form-validation-error:after {
+  content: ' ';
+  position: absolute;
+  width: 0;
+  height: 0;
+  right: 100%;
+  top: 5px;
+  margin-top: -3px;
+  border-right: 9px solid;
+  border-top: 7px solid;
+  border-bottom: -3px solid;
+  border-color: transparent white transparent transparent;
+}
+
+.dDaccText {
+  padding-top: -2px !important;
+  font: bold 11px verdana !important;
+}
+
+input.error,
+textarea.error {
+  border-color: #f30c0ca3;
+  border-width: 1px;
+}
+
+input.error:visited,
+input.error:focus,
+input:active {
+  border-color: white !important;
+  -webkit-appearance: textfield !important;
+  /* background-color: white; */
+  -webkit-rtl-ordering: logical;
+  cursor: auto !important;
+  /* padding: 1px; */
+  border-width: 1px !important;
+  border-style: inset !important;
+  border-color: initial !important;
+  border-image: initial !important;
+}
+
+input.valid {
+  border-color: white;
+  -webkit-appearance: textfield;
+  /* background-color: white; */
+  -webkit-rtl-ordering: logical;
+  cursor: auto;
+  /* padding: 1px; */
+  border-width: 2px;
+  border-style: inset;
+  border-color: initial;
+  border-image: initial;
+}
+
+.dDAccNumber {
+  padding-top: -2px !important;
+  font: normal 10px verdana !important;
+  /* min-height: 10px; */
+}
+
+.test {
+  color: #003f62;
+  font-weight: 400;
+  font: 11px verdana;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.container {
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.form-horizontal1.form-group1 {
+  margin-bottom: 5px;
+  margin-top: 1px;
+}
+
+a.techref:focus,
+a.techref:hover {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a.techref {
+  font-weight: bold;
+  font-size: 12px;
+  color: #009fda;
+}
+
+label {
+  color: #003f62 !important;
+  font-weight: 400 !important;
+  font: 11px verdana !important;
+  /* padding-bottom:1px!important; */
+}
+
+/* span{
+  color:#003f62;font-size:11px;font-weight: 700;
+} */
+
+h5 {
+  color: #003f62;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline;
+}
+
+.form-horizontal .control-label {
+  padding-top: 1px;
+}
+
+input[type="text"] {
+  width: 180px;
+  height: 20px;
+}
+
+input[type=checkbox],[type="radio"] {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+input[type="radio"] {
+  color: #003f62;
+}
+
+input[type="button"] {
+  width: auto;
+  height: 5%;
+  background-color: #003f61;
+  color: white;
+  font-size: auto;
+  border-radius: 5px;
+}
+
+.btn-primary1,
+.btn-primary1:active,
+.btn-primary1:visited,
+.btn-primary1:focus {
+  background: #9fb9c6 url(./assets/button-list-primary.png) -5px -1px no-repeat !important;
+  height: 23px !important;
+  cursor: pointer !important;
+  line-height: 12px !important;
+  color: #003f62 !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  border: 1px solid #9fb9c6 !important;
+  border-top-color: #bcd2dd !important;
+  border-bottom-color: #81a0ae !important;
+  border-radius: 4px !important;
+}
+
+.btn-primary1:hover {
+  background-position: -5px -31px !important;
+}
+
+select {
+  border: 1px solid #c6c6c6;
+  border-left-color: #dcdcdc;
+  border-right-color: #dcdcdc;
+  border-bottom-color: #e2e2e2;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: Verdana;
+}
+
+h3 {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background: #fff !important;
+  color: #003f62 !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  height: 12px !important;
+  line-height: 12px !important;
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+h4 {
+  color: #003f62 !important;
+  background: none !important;
+  height: 32px !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  /* padding: 0 0 0 16px; */
+  color: #003f62 !important;
+  /* float: left; */
+  margin: 0 !important;
+  line-height: 32px !important;
+}
+
+
+hr {
+  /* display: block; */
+  margin-top: 0.5em !important;
+  margin-bottom: 0.5em !important;
+  margin-left: -1em !important;
+  margin-right: -1em !important;
+}
+
+.dialog {
+  min-width: 150px !important;
+  z-index: 1030 !important;
+  left: 414px !important;
+  top: 420px !important;
+  opacity: 1 !important;
+}
+
+p-dialog .ui-widget-content {
+  line-height: 14px !important;
+  border: 1px solid #b1c6d1 !important;
+  background: #d5e0e5 !important;
+  color: #003f62 !important;
+  border-radius: 5px !important;
+}
+
+.ui-datepicker table {
+  width: 100% !important;
+  font-size: 0.9em !important;
+  border-collapse: collapse !important;
+  margin: 0 0 0.4em !important;
+}
+
+p-calendar .ui-datepicker {
+  width: 100% !important;
+  position: absolute;
+  background-color: #bdbbbb;
+  border: 1px none #000000;
+}
+
+.ui-corner-all {
+  border-radius: 3px !important;
+  border-top-left-radius: 3px !important;
+  border-top-right-radius: 3px !important;
+  border-bottom-right-radius: 3px !important;
+  border-bottom-left-radius: 3px !important;
+}
+
+.ui-datepicker.ui-widget {
+  display: block !important;
+  z-index: 1003 !important;
+  top: 22px !important;
+  left: 195px !important;
+  opacity: 1;
+}
+
+p-calendar .ui-datepicker th {
+  padding: 0.7em 0.3em !important;
+  text-align: center !important;
+  font-weight: bold !important;
+  color: #f6f8fa !important;
+  background-color: #003F62 !important;
+  border-bottom: 1px solid white !important;
+  /* border: 0 !important; */
+  border-right: 1px solid #999999 !important;
+  border-left: 1px solid #999999 !important;
+}
+
+.ui-datepicker.ui-widget .ui-datepicker-calendar td a {
+  border: 0 none !important;
+  text-align: center !important;
+  padding: 0px !important;
+  /* background-color: #999999!important; */
+  font-size: 11px !important;
+  font-family: Verdana !important;
+  background: white !important;
+  color: black !important;
+  border-right: 1px solid #999999 !important;
+  border-left: 1px solid #999999 !important;
+  border-top: 1px solid #999999 !important;
+  border-bottom: 1px solid #999999 !important;
+}
+
+.ui-widget-header {
+  background: #d5dde4 !important;
+  border: 1px solid #abc7d6 !important;
+}
+
+p-calendar .ui-datepicker td a {
+  border-bottom: 1px solid rgba(213, 213, 213, 0.5) !important;
+  border-top: 1px solid rgba(213, 213, 213, 0.5) !important;
+  border-left: 1px solid rgba(213, 213, 213, 0.5) !important;
+  border-right: 1px solid rgba(213, 213, 213, 0.5) !important;
+}
+
+/* p-calendar .ui-datepicker header {
+  background-color: #ddebf9 !important;
+} */
+
+p-calendar .ui-datepicker .ui-datepicker-calendar td:not(.ui-state-disabled) a:hover {
+  border-color: red !important;
+  background: white !important;
+  color: black !important;
+}
+
+.ui-widget-header .ui-button,
+.ui-widget-content .ui-button,
+.ui-widget.ui-button,
+.ui-button {
+  border: 1px solid white !important;
+  color: #ffffff !important;
+  background: white !important;
+  transition: background-color 0.2s;
+}
+
+.fa-calendar:before {
+  background: url("./assets/calendarIcon.gif") !important;
+  content: url("./assets/calendarIcon.gif") !important;
+}
+
+p-calendar .ui-state-disabled {
+  cursor: not-allowed !important;
+}
+
+.ui-widget {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+/* .ui-datepicker.ui-widget .ui-datepicker-calendar thead th {
+  background-color: #003f62 !important;
+  padding: 8px !important;
+  padding-top: 8px !important;
+  padding-right: 8px !important;
+  padding-bottom: 8px !important;
+  padding-left: 8px !important;
+} */
+
+div.required label:after {
+  content: " *";
+  color: red;
+}
+
+p-dropdown .ui-dropdown .ui-dropdown-label {
+  border: 1px solid #4c7891 !important;
+  border-top-left-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+  word-break: break-word;
+}
+
+p-dropdown .ui-dropdown .ui-dropdown-trigger {
+  background: #e5e5e5;
+  background-image: linear-gradient(to top, #ccc 0%, #eee 60%);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border: 1px solid #4c7891 !important;
+}
+
+p-dropdown .ui-dropdown-panel .ui-dropdown-filter {
+  background-color: rgb(255, 255, 255);
+  height: 23px;
+  line-height: 23px;
+  padding: 0px 19px 1px 4px;
+  border: 1px solid #4c7891 !important;
+  border-radius: 0;
+  width: 100% !important;
+}
+
+p-dropdown .ui-dropdown-panel .ui-dropdown-filter-container {
+  display: block !important;
+}
+
+p-dropdown span {
+  font-size: 11px;
+}
+
+p-dropdown .ui-dropdown .ui-dropdown-label {
+  color: #003f62 !important;
+}
+
+p-dropdown label:after {
+  content: "" !important;
+}
+
+p-dropdown .ui-dropdown-panel .ui-dropdown-item {
+  /* line-height: 10px !important; */
+  height: auto !important;
+  color: #003f62;
+  font: bold 11px verdana !important;
+  margin-bottom: 2px !important;
+}
+
+p-dropdown .ui-dropdown-panel .ui-dropdown-item:hover {
+  background: #003f62 !important;
+  color: #ffffff !important;
+  border-radius: 0;
+}
+
+p-dropdown .ui-state-highlight {
+  background: #003f62 !important;
+  color: #ffffff !important;
+}
+
+p-dropdown .ui-state-default {
+  border: none;
+}
+
+p-dropdown .ui-dropdown-panel.ui-widget-content {
+  color: #003f62 !important;
+  font: bold 11px verdana !important;
+}
+
+p-dropdown .ui-dropdown .ui-dropdown-panel {
+  border: 1px solid #4c7891;
+  padding: 2px;
+  font-size: 11px;
+  max-height: 250px !important;
+  width: 129px !important;
+  font-weight: bold;
+  font-size-adjust: 0.58;
+}
+
+/*.ui-dropdown-panel .ui-dropdown-list > li:nth-child(even) {
+    background-color: #F1F5F7;
+    }*/
+
+p-dropdown .ui-dropdown-panel .ui-dropdown-list>li:nth-child(odd) {
+  background-color: rgb(229, 236, 240);
+}
+
+p-dropdown .replace {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  border: 1px solid green;
+  opacity: 0;
+}
+
+p-dropdown .ui-inputtext {
+  color: #003f62 !important;
+  padding: 0.65em;
+  font-weight: bold !important;
+  font-family: verdana;
+  font-size: 11px;
+}
+
+p-dropdown .fa {
+  padding-top: 3px;
+  padding-right: 0.25em;
+}
+
+/*
+.ng-valid[required], .ng-valid.required  {
+  border: 1px solid #42A948;
+} */
+
+/* .ng-invalid:not(form)  {
+  border: 1px solid red;
+  width:15px;
+} */
+
+input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.alert-danger {
+  color: red;
+  background-color: transparent;
+  /* border-color: #ebccd1; */
+}
+
+.alert {
+  padding: 1px;
+  margin-bottom: 1px;
+  border: 1px solid transparent;
+  border-radius: none;
+}
+
